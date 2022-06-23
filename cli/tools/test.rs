@@ -1,7 +1,6 @@
 // Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
 
 use crate::cache;
-use crate::cache::CacherLoader;
 use crate::colors;
 use crate::compat;
 use crate::create_main_worker;
@@ -884,8 +883,6 @@ fn extract_files_from_regex_blocks(
         file_source.push_str(&format!("{}\n", text.as_str()));
       }
 
-      file_source.push_str("export {};");
-
       let file_specifier = deno_core::resolve_url_or_path(&format!(
         "{}${}-{}{}",
         specifier,
@@ -1455,7 +1452,7 @@ pub async fn run_tests_with_watch(
           .collect(),
         false,
         maybe_imports,
-        cache.as_mut_loader(),
+        &mut cache,
         maybe_resolver,
         maybe_locker,
         None,
